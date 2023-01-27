@@ -14,7 +14,7 @@ export class LoggerDataService {
   getPingData(fromDate: Date, toDate: Date) {
     return this.http.get(this.routes.getPingData(fromDate, toDate))      
     .subscribe((data: any) => {
-
+      debugger;
     });
   }
 
