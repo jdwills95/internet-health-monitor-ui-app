@@ -1,4 +1,4 @@
-import { ISpeedData } from "./speed-data.interface";
+import { ISpeedData } from "src/models/speed/speed-data.interface";
 
 export class SpeedData implements ISpeedData {
     date_time: string;

@@ -1,4 +1,4 @@
-import { IPingData } from "./ping-data.interface"
+import { IPingData } from "src/models/ping/ping-data.interface"
 
 export class PingData implements IPingData {
     date_time: string;
