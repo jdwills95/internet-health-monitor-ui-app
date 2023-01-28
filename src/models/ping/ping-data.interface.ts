@@ -1,6 +1,7 @@
 export interface IPingData {
-    date_time: string;
+    dateTime: Date;
     ip: string;
-    packets_received: string;
+    packetsReceived: number;
+    packetsSent: number;
     latency: string;
 }

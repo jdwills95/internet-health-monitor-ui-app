@@ -1,15 +1,17 @@
 import { IPingData } from "src/models/ping/ping-data.interface"
 
 export class PingData implements IPingData {
-    date_time: string;
+    dateTime: Date;
     ip: string;
-    packets_received: string;
+    packetsReceived: number;
+    packetsSent: number;
     latency: string;
 
     constructor(input: any) {
-        this.date_time = input.date_time;
+        this.dateTime = input.dateTime;
         this.ip = input.ip;
-        this.packets_received = input.packets_received;
+        this.packetsReceived = input.packetsReceived;
+        this.packetsSent = input.packetsSent;
         this.latency = input.latency;
     }
 }
