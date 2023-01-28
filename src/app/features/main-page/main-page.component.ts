@@ -23,7 +23,7 @@ export class MainPageComponent {
     private loggerDataService: LoggerDataService
   ) {
     const fromDate = new Date('22 January 2023 02:00 UTC');
-    const toDate = new Date('22 January 2023 15:00 UTC');
+    const toDate = new Date();
 
     this.loggerDataService.getPingData(fromDate, toDate)
     .then(pd => {

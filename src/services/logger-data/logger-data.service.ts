@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { PingData } from 'src/models/ping/ping-data.class';
 import { SpeedData } from 'src/models/speed/speed-data.class'
-import { plainToInstance } from 'class-transformer';
 import * as moment from "moment";
 
 @Injectable()
@@ -40,14 +39,25 @@ export class LoggerDataService {
     })
   }
 
-  getSpeedData(fromDate: Date, toDate: Date) {
-    return this.http.get(this.routes.getSpeedData(fromDate, toDate))      
-    .subscribe((data: any) => {
-      if(data?.length) {
-        return data.map((p: SpeedData)  => plainToInstance(SpeedData, p))
-      }
-      return data;
-    });
+  async getSpeedData(fromDate: Date, toDate: Date): Promise<Array<SpeedData>> {
+    return new Promise((resolve, reject) => {
+      
+      this.http.get(this.routes.getSpeedData(fromDate, toDate))
+      .subscribe((response: any) => {
+        if(response){
+          let speedData: SpeedData[] = [];
+          speedData = response.map((p: any)  => {
+            const speedData: SpeedData = {
+              dateTime: moment.utc(p.date_time).toDate(),
+              speedDown: p.speed_down,
+              speedUp: p.speed_up,
+            }
+            return speedData;
+          });
+          resolve(speedData);
+        }
+      })
+    })
   }
 
   private convertLocalDateToUTC(date: Date) {
