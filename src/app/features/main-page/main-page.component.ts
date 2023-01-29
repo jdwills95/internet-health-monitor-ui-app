@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { FormGroup, FormControl } from '@angular/forms';  
 
 import { LoggerDataService } from 'src/services/logger-data/logger-data.service'
 import { IPingData } from 'src/models/ping/ping-data.interface';
@@ -9,6 +10,11 @@ import { IPingData } from 'src/models/ping/ping-data.interface';
   styleUrls: ['./main-page.component.scss']
 })
 export class MainPageComponent {
+  range = new FormGroup({
+    start: new FormControl<Date | null>(null),
+    end: new FormControl<Date | null>(null),
+  });
+
   columnDefs = [
     {headerName: 'Date Time', field: 'dateTime'},
     {headerName: 'IP Address', field: 'ip', filter: true},
