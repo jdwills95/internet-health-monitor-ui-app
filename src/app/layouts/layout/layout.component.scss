@@ -1,0 +1,20 @@
+.page-container {
+    min-height: 100vh;
+    min-width: 100vw;
+    overflow: hidden;
+    display: block;
+    position: relative;
+    padding-bottom: 3.5em;
+  
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f3f3f3;
+  }
+  
+.main-content {
+    margin-top: 3.5em;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+    width: 80%;
+  }
