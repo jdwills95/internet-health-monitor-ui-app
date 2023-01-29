@@ -27,9 +27,9 @@ export class LoggerDataService {
             const pingData: PingData = {
               dateTime: moment.utc(p.date_time).toDate(),
               ip: p.ip.trim(),
-              packetsReceived: Number(p.packets_received.trim()),
-              packetsSent: Number(p.packets_sent.trim()),
-              latency: p.latency.trim(),
+              packetsReceived: Number(p.packets_received),
+              packetsSent: Number(p.packets_sent),
+              latency: Number(p.latency),
             }
             return pingData;
           });

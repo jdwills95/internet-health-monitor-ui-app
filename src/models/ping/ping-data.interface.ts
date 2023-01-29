@@ -3,5 +3,5 @@ export interface IPingData {
     ip: string;
     packetsReceived: number;
     packetsSent: number;
-    latency: string;
+    latency: number;
 }

@@ -5,7 +5,7 @@ export class PingData implements IPingData {
     ip: string;
     packetsReceived: number;
     packetsSent: number;
-    latency: string;
+    latency: number;
 
     constructor(input: any) {
         this.dateTime = input.dateTime;

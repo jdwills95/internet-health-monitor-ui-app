@@ -12,6 +12,8 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatFormFieldModule } from '@angular/material/form-field';
 import {MatNativeDateModule} from '@angular/material/core';
 import {MatInputModule} from '@angular/material/input';
+import {MatSelectModule} from '@angular/material/select';
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 
 import {
   NgxMatDatetimePickerModule,
@@ -34,7 +36,9 @@ import {
     NgxMatDatetimePickerModule,
     NgxMatTimepickerModule,
     NgxMatNativeDateModule,
-    MatInputModule
+    MatInputModule,
+    MatSelectModule,
+    MatSlideToggleModule
   ]
 })
 export class MainPageModule { }

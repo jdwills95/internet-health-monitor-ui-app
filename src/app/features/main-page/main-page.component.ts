@@ -14,6 +14,7 @@ export class MainPageComponent {
   pingDates = new FormGroup({
     fromDate: new FormControl<Date>(this.getFromDefaultDate()),
     toDate: new FormControl<Date>(new Date()),
+    filterIpDrop: new FormControl<string>('All')
   });
 
   columnDefs = [
@@ -24,7 +25,11 @@ export class MainPageComponent {
     {headerName: 'Latency', field: 'latency'}
   ];
 
+  onlyDroppedPackets = false;
+
   pingData: IPingData[] = [];
+  pingDataFiltered: IPingData[] = [];
+  ips: string[] = ['All'];
 
   fromDate = this.pingDates.controls['fromDate'].value ?
     this.pingDates.controls['fromDate'].value :
@@ -51,7 +56,9 @@ export class MainPageComponent {
 
     this.loggerDataService.getPingData(fromDate, toDate)
     .then(pd => {
+      this.getUniquePingAddress(pd);
       this.pingData = pd;
+      this.onPingFilterChanged();
     });
   }
 
@@ -72,6 +79,33 @@ export class MainPageComponent {
       return this.pingDates.controls.fromDate.value > this.pingDates.controls.toDate.value
     }
     return false;
+  }
+
+  getUniquePingAddress(pingData: IPingData[]) {
+    this.ips = ['All']
+
+    pingData.forEach(pd => {
+      if(!this.ips.includes(pd.ip)){
+        this.ips.push(pd.ip);
+      }
+    })
+  }
+
+  onPingFilterChanged() {
+    if(this.pingDates.controls['filterIpDrop'].value == 'All') {
+      this.pingDataFiltered = this.pingData;
+    } else {
+      this.pingDataFiltered = this.pingData.filter(pd => pd.ip == this.pingDates.controls['filterIpDrop'].value)
+    }
+
+    if(this.onlyDroppedPackets) {
+      this.pingDataFiltered = this.pingData.filter(pd => pd.packetsReceived < pd.packetsSent)
+    }
+  }
+
+  toggleDroppedPackets(e: any){
+    this.onlyDroppedPackets = e.checked;
+    this.onPingFilterChanged();
   }
 
 }

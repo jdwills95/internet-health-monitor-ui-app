@@ -23,10 +23,24 @@
     </ngx-mat-datetime-picker>
  </mat-form-field>
  <mat-error *ngIf="checkDateRange()">End date time must be after start datetime.</mat-error>
+
+<mat-form-field appearance="fill" [formGroup]="pingDates">
+  <mat-label>Filter by Ip</mat-label>
+  <mat-select formControlName="filterIpDrop" 
+    (selectionChange)="onPingFilterChanged()">
+    <mat-option *ngFor="let ip of ips" [value]="ip">
+      {{ip}}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+
+<mat-slide-toggle [checked]="onlyDroppedPackets" (change)="toggleDroppedPackets($event)">
+    Show Only Dropped Packets
+</mat-slide-toggle>
   
 <ag-grid-angular 
-    style="width: 75vw; height: 500px;" 
+    style="width: 100%; height: 500px;" 
     class="ag-theme-balham"
-    [rowData]="pingData" 
+    [rowData]="pingDataFiltered" 
     [columnDefs]="columnDefs">
 </ag-grid-angular>
