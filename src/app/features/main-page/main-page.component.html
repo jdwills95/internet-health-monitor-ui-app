@@ -1,18 +1,28 @@
-<mat-form-field appearance="fill">
-    <mat-label>Enter a date range</mat-label>
-    <mat-date-range-input [formGroup]="range" [rangePicker]="picker">
-      <input matStartDate formControlName="start" placeholder="Start date">
-      <input matEndDate formControlName="end" placeholder="End date">
-    </mat-date-range-input>
-    <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
-    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-    <mat-date-range-picker #picker></mat-date-range-picker>
-  
-    <mat-error *ngIf="range.controls.start.hasError('matStartDateInvalid')">Invalid start date</mat-error>
-    <mat-error *ngIf="range.controls.end.hasError('matEndDateInvalid')">Invalid end date</mat-error>
-  </mat-form-field>
-  
-  <!-- <p>Selected range: {{range.value | json}}</p> -->
+<mat-form-field appearance="fill" [formGroup]="pingDates">
+    <mat-label>Start datetime</mat-label>
+    <input matInput 
+        [ngxMatDatetimePicker]="fromDatePicker" 
+        placeholder="Choose a date" 
+        formControlName="fromDate"
+        [value]="fromDate"
+        (dateChange)="dateChange('ping')">
+    <mat-datepicker-toggle matSuffix [for]="$any(fromDatePicker)"></mat-datepicker-toggle>
+    <ngx-mat-datetime-picker #fromDatePicker>
+    </ngx-mat-datetime-picker>
+ </mat-form-field>
+ <mat-form-field appearance="fill" [formGroup]="pingDates">
+    <mat-label>End datetime</mat-label>
+    <input matInput 
+        [ngxMatDatetimePicker]="toDatePicker" 
+        placeholder="Choose a date" 
+        formControlName="toDate"
+        [value]="toDate"
+        (dateChange)="dateChange('ping')">
+    <mat-datepicker-toggle matSuffix [for]="$any(toDatePicker)"></mat-datepicker-toggle>
+    <ngx-mat-datetime-picker #toDatePicker>
+    </ngx-mat-datetime-picker>
+ </mat-form-field>
+ <mat-error *ngIf="checkDateRange()">End date time must be after start datetime.</mat-error>
   
 <ag-grid-angular 
     style="width: 75vw; height: 500px;" 

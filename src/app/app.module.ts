@@ -13,8 +13,16 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatDatepickerModule } from '@angular/material/datepicker'  
 import { MatNativeDateModule } from '@angular/material/core'  
 import { MatFormFieldModule } from '@angular/material/form-field' 
+import { MatInputModule } from '@angular/material/input';
 
 import { MainPageModule } from 'src/app/features/main-page/main-page.module'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
+import {
+  NgxMatDatetimePickerModule,
+  NgxMatNativeDateModule,
+  NgxMatTimepickerModule
+} from '@angular-material-components/datetime-picker';
 
 @NgModule({
   declarations: [
@@ -32,7 +40,12 @@ import { MainPageModule } from 'src/app/features/main-page/main-page.module'
     MatDatepickerModule,  
     MatNativeDateModule,
     MatFormFieldModule,
-    MainPageModule
+    MainPageModule,
+    FormsModule,
+    ReactiveFormsModule,
+    NgxMatDatetimePickerModule,
+    NgxMatTimepickerModule,
+    NgxMatNativeDateModule
   ],
   providers: [],
   bootstrap: [AppComponent]

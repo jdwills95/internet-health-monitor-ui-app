@@ -9,9 +9,15 @@ import { SharedModule } from 'src/components/shared.module';
 import { AgGridModule } from 'ag-grid-angular';
 
 import {MatDatepickerModule} from '@angular/material/datepicker';
-import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatFormFieldModule } from '@angular/material/form-field';
 import {MatNativeDateModule} from '@angular/material/core';
+import {MatInputModule} from '@angular/material/input';
 
+import {
+  NgxMatDatetimePickerModule,
+  NgxMatNativeDateModule,
+  NgxMatTimepickerModule,
+} from '@angular-material-components/datetime-picker';
 
 @NgModule({
   declarations: [MainPageComponent],
@@ -24,7 +30,11 @@ import {MatNativeDateModule} from '@angular/material/core';
     ReactiveFormsModule,
     MatDatepickerModule,
     MatFormFieldModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    NgxMatDatetimePickerModule,
+    NgxMatTimepickerModule,
+    NgxMatNativeDateModule,
+    MatInputModule
   ]
 })
 export class MainPageModule { }

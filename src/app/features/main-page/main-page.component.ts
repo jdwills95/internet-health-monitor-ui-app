@@ -3,6 +3,7 @@ import { FormGroup, FormControl } from '@angular/forms';
 
 import { LoggerDataService } from 'src/services/logger-data/logger-data.service'
 import { IPingData } from 'src/models/ping/ping-data.interface';
+import {isAfterDateValidator} from 'src/validators/is-after-date/is-after-date.validator'
 
 @Component({
   selector: 'app-main-page',
@@ -10,9 +11,9 @@ import { IPingData } from 'src/models/ping/ping-data.interface';
   styleUrls: ['./main-page.component.scss']
 })
 export class MainPageComponent {
-  range = new FormGroup({
-    start: new FormControl<Date | null>(null),
-    end: new FormControl<Date | null>(null),
+  pingDates = new FormGroup({
+    fromDate: new FormControl<Date>(this.getFromDefaultDate()),
+    toDate: new FormControl<Date>(new Date()),
   });
 
   columnDefs = [
@@ -25,16 +26,52 @@ export class MainPageComponent {
 
   pingData: IPingData[] = [];
 
+  fromDate = this.pingDates.controls['fromDate'].value ?
+    this.pingDates.controls['fromDate'].value :
+    this.getFromDefaultDate();
+
+  toDate = this.pingDates.controls['toDate'].value ?
+    this.pingDates.controls['toDate'].value :
+    new Date();
+
   constructor(
     private loggerDataService: LoggerDataService
   ) {
-    const fromDate = new Date(new Date().setMonth(new Date().getMonth() - 1));
-    const toDate = new Date();
+    this.getPingData();
+  }
+
+  getPingData() {
+    const fromDate = this.pingDates.controls['fromDate'].value ?
+      this.pingDates.controls['fromDate'].value :
+      new Date(new Date().setMonth(new Date().getMonth() - 1));
+
+    const toDate = this.pingDates.controls['toDate'].value ?
+      this.pingDates.controls['toDate'].value :
+      new Date();
 
     this.loggerDataService.getPingData(fromDate, toDate)
     .then(pd => {
       this.pingData = pd;
     });
+  }
+
+  dateChange(type: string) {
+    if(!this.checkDateRange()) {
+      if(type == 'ping') {
+        this.getPingData();
+      }
+    }
+  }
+
+  getFromDefaultDate(): Date {
+    return new Date(new Date().setMonth(new Date().getMonth() - 1));
+  }
+
+  checkDateRange() {
+    if(this.pingDates.controls.fromDate.value != null && this.pingDates.controls.toDate.value) {
+      return this.pingDates.controls.fromDate.value > this.pingDates.controls.toDate.value
+    }
+    return false;
   }
 
 }
