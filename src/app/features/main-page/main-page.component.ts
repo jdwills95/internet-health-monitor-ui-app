@@ -11,7 +11,7 @@ import { IPingData } from 'src/models/ping/ping-data.interface';
 export class MainPageComponent {
   columnDefs = [
     {headerName: 'Date Time', field: 'dateTime'},
-    {headerName: 'IP Address', field: 'ip'},
+    {headerName: 'IP Address', field: 'ip', filter: true},
     {headerName: 'Packets Received', field: 'packetsReceived'},
     {headerName: 'Packets Sent', field: 'packetsSent'},
     {headerName: 'Latency', field: 'latency'}
