@@ -3,13 +3,13 @@ import { HttpClient } from '@angular/common/http';
 import { PingData } from 'src/models/ping/ping-data.class';
 import { SpeedData } from 'src/models/speed/speed-data.class'
 import * as moment from 'moment';
-import { environment } from 'src/assets/environment/environment'
+import { environment } from 'src/assets/environment'
 
 @Injectable()
 export class LoggerDataService {
   constructor(private http: HttpClient) { }
   
-  private baseUrl = environment.backendBaseUrl;
+  private baseUrl = environment.apiUrl;
   private routes = {
       getPingData: (fromDate: Date, toDate: Date) => 
       `${this.baseUrl}/ping/${this.formatDateForAPI(fromDate)}/${this.formatDateForAPI(toDate)}`,
