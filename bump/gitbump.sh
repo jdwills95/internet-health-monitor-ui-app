@@ -1,33 +1,4 @@
-#!/bin/sh
-function inc()
-{
-    split(s, a, ".")
-
-    len1 = length(a)
-    if(len1==0)
-        return -1
-    else if(len1==1)
-        return s+1
-
-    len2 = length(a[len1])
-    len3 = length(a[len1]+1)
-
-    head = join(a, 1, len1-1)
-    tail = sprintf("%0*d", len2, (a[len1]+1)%(10^len2))
-
-    if(len2==len3)
-        return head "." tail
-    else
-        return inc(head) "." tail
-}
-
-function join()
-{
-    for(i=x; i<y; i++)
-        s = s a[i] "."
-    return s a[y]
-}
-
+#!/usr/bin/env bash
 set -e
 
 git fetch --tags # checkout action does not get these
@@ -42,8 +13,7 @@ if [ -z "$oldv" ]; then
    oldv="0.0.0"
 fi
 
-echo "$(inc $oldv)"
-newv="$(inc $oldv)"
+newv="$oldv" | awk 'BEGIN{FS=OFS="."} {$3+=1} 1'
 echo "newv: $newv"
 
 git tag -a "v$newv" -m "version $newv"
