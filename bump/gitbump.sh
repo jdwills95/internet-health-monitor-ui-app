@@ -1,3 +1,4 @@
+#!/bin/sh
 set -e
 
 git fetch --tags # checkout action does not get these
@@ -19,7 +20,7 @@ echo "newv: $newv"
 git tag -a "v$newv" -m "version $newv"
 git push --follow-tags
 
-function inc(s,    a, len1, len2, len3, head, tail)
+function inc()
 {
     split(s, a, ".")
 
@@ -41,7 +42,7 @@ function inc(s,    a, len1, len2, len3, head, tail)
         return inc(head) "." tail
 }
 
-function join(a, x, y,    s)
+function join()
 {
     for(i=x; i<y; i++)
         s = s a[i] "."
