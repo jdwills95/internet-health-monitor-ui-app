@@ -12,6 +12,7 @@ if [ -z "$oldv" ]; then
    oldv="0.0.0"
 fi
 
+echo inc $oldv
 newv="$(inc $oldv)"
 echo "newv: $newv"
 
