@@ -12,7 +12,7 @@ if [ -z "$oldv" ]; then
    oldv="0.0.0"
 fi
 
-newv=inc("$oldv")
+newv=$(inc($oldv))
 echo "newv: $newv"
 
 git tag -a "v$newv" -m "version $newv"
