@@ -5,7 +5,7 @@ on:
     branches:
       - main
 jobs:
-  build:0
+  build:
     env:
       VERSION: '$(git tag --sort=-v:refname --list "v[0-9]*" | head -n 1)'
     runs-on: ubuntu-latest
