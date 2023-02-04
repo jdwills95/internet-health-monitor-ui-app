@@ -2,22 +2,21 @@ name: Bump version in git
 
 on:
   push:
-    branches: 
-    - main
+    branches:
+      - main
 jobs:
-  build-and-deploy:    
+  build-and-deploy:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - name: Bump version
-      run: |
-        git config --global user.email "jdwills95+actions@gmail.com"
-        git config --global user.name "Actions"
-        git fetch --tags
-        wget -O - https://raw.githubusercontent.com/jdwills95/internet-health-monitor-ui-app/main/bump/gitbump.sh | bash
-        echo "VERSION=$(git tag --sort=-v:refname --list "v[0-9]*" | head -n 1 | cut -c 2-)" >> $GITHUB_ENV
-        docker run --rm -i -v $PWD:/app -w /app jdwills95/internet-health-monitor-ui-app/main/bump --filename index.html --replace $VERSION
-        docker build -t darthmanatee/internethealthloggerui:latest .
-        docker tag darthmanatee/internethealthloggerui:latest darthmanatee/internethealthloggerui:$VERSION
-        docker push darthmanatee/internethealthloggerui:$VERSION
-        docker push darthmanatee/internethealthloggerui:latest
+      - uses: actions/checkout@v2
+      - name: Bump version
+        run: |
+          git config --global user.email "jdwills95+actions@gmail.com"
+          git config --global user.name "Actions"
+          git fetch --tags
+          wget -O - https://raw.githubusercontent.com/jdwills95/internet-health-monitor-ui-app/main/bump/gitbump.sh | bash
+          echo "VERSION=$(git tag --sort=-v:refname --list "v[0-9]*" | head -n 1 | cut -c 2-)" >> $GITHUB_ENV
+          docker build -t darthmanatee/internethealthloggerui:latest .
+          docker tag darthmanatee/internethealthloggerui:latest darthmanatee/internethealthloggerui:$VERSION
+          docker push darthmanatee/internethealthloggerui:$VERSION
+          docker push darthmanatee/internethealthloggerui:latest
