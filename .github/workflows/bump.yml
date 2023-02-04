@@ -17,7 +17,11 @@ jobs:
           wget -O - https://raw.githubusercontent.com/jdwills95/internet-health-monitor-ui-app/main/bump/gitbump.sh | bash
           VERSION=$(git tag --sort=-v:refname --list "v[0-9]*" | head -n 1)
           echo "Docker Tag Version: $VERSION"
+          echo "Building Latest"
           docker build -t darthmanatee/internethealthloggerui:latest .
+          echo "Tagging images"
           docker tag darthmanatee/internethealthloggerui:latest darthmanatee/internethealthloggerui:$VERSION
+          echo "Pushing Tag $VERSION"
           docker push darthmanatee/internethealthloggerui:$VERSION
+          echo "Pushing Tag latest"
           docker push darthmanatee/internethealthloggerui:latest
