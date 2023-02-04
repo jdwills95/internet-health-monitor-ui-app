@@ -13,7 +13,7 @@ if [ -z "$oldv" ]; then
 fi
 
 echo "oldv: $oldv"
-newv="$oldv" | awk 'BEGIN{FS=OFS="."} {$3+=1} 1'
+newv="$oldv" | awk -F. -v OFS=. 'NF==1{print ++$NF}; NF>1{if(length($NF+1)>length($NF))$(NF-1)++; $NF=sprintf("%0*d", length($NF), ($NF+1)%(10^length($NF))); print}'
 echo "newv: $newv"
 
 git tag -a "v$newv" -m "version $newv"
