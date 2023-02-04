@@ -16,5 +16,5 @@ echo "oldv: $oldv"
 newv="${oldv%.*}.$((${oldv##*.}+1))"
 echo "newv: $newv"
 
-git tag -a "v$newv" -m "version $newv"
+git tag -a "$newv" -m "version $newv"
 git push --follow-tags
