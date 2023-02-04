@@ -17,14 +17,6 @@ jobs:
           wget -O - https://raw.githubusercontent.com/jdwills95/internet-health-monitor-ui-app/main/bump/gitbump.sh | bash
           VERSION=$(git tag --sort=-v:refname --list "v[0-9]*" | head -n 1)
           echo "Docker Tag Version: $VERSION"
-          echo "Building Latest"
-          docker build -t darthmanatee/internethealthloggerui:latest .
-          echo "Tagging images"
-          docker tag darthmanatee/internethealthloggerui:latest darthmanatee/internethealthloggerui:$VERSION
-          echo "Pushing Tag $VERSION"
-          docker push darthmanatee/internethealthloggerui:$VERSION
-          echo "Pushing Tag latest"
-          docker push darthmanatee/internethealthloggerui:latest
       - name: Login to Docker Hub
         uses: docker/login-action@v2
         with:
@@ -38,4 +30,11 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/clockbox:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/internethealthloggerui:$VERSION
+      - name: Build and push
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/internethealthloggerui:latest
