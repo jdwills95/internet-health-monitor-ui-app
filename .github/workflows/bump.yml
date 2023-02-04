@@ -6,8 +6,6 @@ on:
       - main
 jobs:
   build:
-    env:
-      VERSION: '$(git tag --sort=-v:refname --list "v[0-9]*" | head -n 1)'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -17,7 +15,7 @@ jobs:
           git config --global user.name "Actions"
           git fetch --tags
           wget -O - https://raw.githubusercontent.com/jdwills95/internet-health-monitor-ui-app/main/bump/gitbump.sh | bash
-          VERSION=$(git tag --sort=-v:refname --list "v[0-9]*" | head -n 1)
+          echo "VERSION=$(git tag --sort=-v:refname --list "v[0-9]*" | head -n 1)" >> $GITHUB_ENV
       - name: Checkout
         uses: actions/checkout@v3
       - name: Login to Docker Hub
