@@ -1,1 +1,47 @@
-<p>speed-data-grid works!</p>
+<div *ngIf="speedDataLoaded" class="table-div">
+  <h1>Speed Data</h1>
+  <mat-form-field appearance="fill" [formGroup]="speedDates">
+    <mat-label>Start datetime</mat-label>
+    <input
+      matInput
+      [ngxMatDatetimePicker]="fromDatePicker"
+      placeholder="Choose a date"
+      formControlName="fromDate"
+      [value]="fromDate"
+      (dateChange)="dateChange('speed')"
+    />
+    <mat-datepicker-toggle
+      matSuffix
+      [for]="$any(fromDatePicker)"
+    ></mat-datepicker-toggle>
+    <ngx-mat-datetime-picker #fromDatePicker> </ngx-mat-datetime-picker>
+  </mat-form-field>
+  <mat-form-field appearance="fill" [formGroup]="speedDates">
+    <mat-label>End datetime</mat-label>
+    <input
+      matInput
+      [ngxMatDatetimePicker]="toDatePicker"
+      placeholder="Choose a date"
+      formControlName="toDate"
+      [value]="toDate"
+      (dateChange)="dateChange('speed')"
+    />
+    <mat-datepicker-toggle
+      matSuffix
+      [for]="$any(toDatePicker)"
+    ></mat-datepicker-toggle>
+    <ngx-mat-datetime-picker #toDatePicker> </ngx-mat-datetime-picker>
+  </mat-form-field>
+  <mat-error *ngIf="checkDateRange()"
+    >End date time must be after start datetime.</mat-error
+  >
+
+  <ag-grid-angular
+    style="width: 100%; height: 500px"
+    class="ag-theme-balham"
+    [rowData]="speedRowData"
+    [columnDefs]="speedColumnDefs"
+    (gridReady)="onGridReady($event)"
+  >
+  </ag-grid-angular>
+</div>
