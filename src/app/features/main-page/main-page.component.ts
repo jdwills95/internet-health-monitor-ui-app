@@ -1,28 +1,68 @@
 import { Component } from '@angular/core';
-import { FormGroup, FormControl } from '@angular/forms';  
+import { FormGroup, FormControl } from '@angular/forms';
 
-import { LoggerDataService } from 'src/services/logger-data/logger-data.service'
+import {
+  ColDef,
+  ColumnApi,
+  ColumnResizedEvent,
+  GridApi,
+  GridReadyEvent,
+} from 'ag-grid-community';
+
+import { LoggerDataService } from 'src/services/logger-data/logger-data.service';
 import { IPingData } from 'src/models/ping/ping-data.interface';
-import {isAfterDateValidator} from 'src/validators/is-after-date/is-after-date.validator'
 
 @Component({
   selector: 'app-main-page',
   templateUrl: './main-page.component.html',
-  styleUrls: ['./main-page.component.scss']
+  styleUrls: ['./main-page.component.scss'],
 })
 export class MainPageComponent {
+  public pingDataLoaded: boolean = false;
+
+  private gridApi!: GridApi<IPingData>;
+  private gridColumnApi!: ColumnApi;
+
   pingDates = new FormGroup({
     fromDate: new FormControl<Date>(this.getFromDefaultDate()),
     toDate: new FormControl<Date>(new Date()),
-    filterIpDrop: new FormControl<string>('All')
+    filterIpDrop: new FormControl<string>('All'),
   });
 
-  columnDefs = [
-    {headerName: 'Date Time', field: 'dateTime'},
-    {headerName: 'IP Address', field: 'ip', filter: true},
-    {headerName: 'Packets Received', field: 'packetsReceived'},
-    {headerName: 'Packets Sent', field: 'packetsSent'},
-    {headerName: 'Latency', field: 'latency'}
+  public pingRowData!: IPingData[];
+
+  pingColumnDefs = [
+    {
+      headerName: 'Date Time',
+      field: 'dateTime',
+      sortable: true,
+      resizable: true,
+    },
+    {
+      headerName: 'IP Address',
+      field: 'ip',
+      filter: true,
+      sortable: true,
+      resizable: true,
+    },
+    {
+      headerName: 'Packets Received',
+      field: 'packetsReceived',
+      sortable: true,
+      resizable: true,
+    },
+    {
+      headerName: 'Packets Sent',
+      field: 'packetsSent',
+      sortable: true,
+      resizable: true,
+    },
+    {
+      headerName: 'Latency',
+      field: 'latency',
+      sortable: true,
+      resizable: true,
+    },
   ];
 
   onlyDroppedPackets = false;
@@ -31,31 +71,31 @@ export class MainPageComponent {
   pingDataFiltered: IPingData[] = [];
   ips: string[] = ['All'];
 
-  fromDate = this.pingDates.controls['fromDate'].value ?
-    this.pingDates.controls['fromDate'].value :
-    this.getFromDefaultDate();
+  fromDate = this.pingDates.controls['fromDate'].value
+    ? this.pingDates.controls['fromDate'].value
+    : this.getFromDefaultDate();
 
-  toDate = this.pingDates.controls['toDate'].value ?
-    this.pingDates.controls['toDate'].value :
-    new Date();
+  toDate = this.pingDates.controls['toDate'].value
+    ? this.pingDates.controls['toDate'].value
+    : new Date();
 
-  constructor(
-    private loggerDataService: LoggerDataService
-  ) {
+  constructor(private loggerDataService: LoggerDataService) {
+    this.pingDataLoaded = false;
     this.getPingData();
   }
 
   getPingData() {
-    const fromDate = this.pingDates.controls['fromDate'].value ?
-      this.pingDates.controls['fromDate'].value :
-      new Date(new Date().setMonth(new Date().getMonth() - 1));
+    this.pingDataLoaded = false;
 
-    const toDate = this.pingDates.controls['toDate'].value ?
-      this.pingDates.controls['toDate'].value :
-      new Date();
+    const fromDate = this.pingDates.controls['fromDate'].value
+      ? this.pingDates.controls['fromDate'].value
+      : new Date(new Date().setMonth(new Date().getMonth() - 1));
 
-    this.loggerDataService.getPingData(fromDate, toDate)
-    .then(pd => {
+    const toDate = this.pingDates.controls['toDate'].value
+      ? this.pingDates.controls['toDate'].value
+      : new Date();
+
+    this.loggerDataService.getPingData(fromDate, toDate).then((pd) => {
       this.getUniquePingAddress(pd);
       this.pingData = pd;
       this.onPingFilterChanged();
@@ -63,8 +103,8 @@ export class MainPageComponent {
   }
 
   dateChange(type: string) {
-    if(!this.checkDateRange()) {
-      if(type == 'ping') {
+    if (!this.checkDateRange()) {
+      if (type == 'ping') {
         this.getPingData();
       }
     }
@@ -75,37 +115,66 @@ export class MainPageComponent {
   }
 
   checkDateRange() {
-    if(this.pingDates.controls.fromDate.value != null && this.pingDates.controls.toDate.value) {
-      return this.pingDates.controls.fromDate.value > this.pingDates.controls.toDate.value
+    if (
+      this.pingDates.controls.fromDate.value != null &&
+      this.pingDates.controls.toDate.value
+    ) {
+      return (
+        this.pingDates.controls.fromDate.value >
+        this.pingDates.controls.toDate.value
+      );
     }
     return false;
   }
 
   getUniquePingAddress(pingData: IPingData[]) {
-    this.ips = ['All']
+    this.ips = ['All'];
 
-    pingData.forEach(pd => {
-      if(!this.ips.includes(pd.ip)){
+    pingData.forEach((pd) => {
+      if (!this.ips.includes(pd.ip)) {
         this.ips.push(pd.ip);
       }
-    })
+    });
   }
 
   onPingFilterChanged() {
-    if(this.pingDates.controls['filterIpDrop'].value == 'All') {
+    if (this.pingDates.controls['filterIpDrop'].value == 'All') {
       this.pingDataFiltered = this.pingData;
     } else {
-      this.pingDataFiltered = this.pingData.filter(pd => pd.ip == this.pingDates.controls['filterIpDrop'].value)
+      this.pingDataFiltered = this.pingData.filter(
+        (pd) => pd.ip == this.pingDates.controls['filterIpDrop'].value
+      );
     }
 
-    if(this.onlyDroppedPackets) {
-      this.pingDataFiltered = this.pingData.filter(pd => pd.packetsReceived < pd.packetsSent)
+    if (this.onlyDroppedPackets) {
+      this.pingDataFiltered = this.pingData.filter(
+        (pd) => pd.packetsReceived < pd.packetsSent
+      );
     }
+
+    this.pingRowData = this.pingDataFiltered;
+    this.pingDataLoaded = true;
   }
 
-  toggleDroppedPackets(e: any){
+  toggleDroppedPackets(e: any) {
     this.onlyDroppedPackets = e.checked;
     this.onPingFilterChanged();
   }
 
+  autoSizeAll(skipHeader: boolean) {
+    const allColumnIds: string[] = [];
+    this.gridColumnApi.getColumns()!.forEach((column) => {
+      allColumnIds.push(column.getId());
+    });
+    this.gridColumnApi.autoSizeColumns(allColumnIds, skipHeader);
+  }
+
+  onGridReady(params: GridReadyEvent<IPingData>) {
+    this.gridApi = params.api;
+    this.gridColumnApi = params.columnApi;
+
+    this.pingRowData = this.pingDataFiltered;
+
+    this.autoSizeAll(false);
+  }
 }
