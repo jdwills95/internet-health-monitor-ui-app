@@ -1,0 +1,66 @@
+<div *ngIf="pingDataLoaded" class="table-div">
+  <h1>Ping Data</h1>
+  <mat-form-field appearance="fill" [formGroup]="pingDates">
+    <mat-label>Start datetime</mat-label>
+    <input
+      matInput
+      [ngxMatDatetimePicker]="fromDatePicker"
+      placeholder="Choose a date"
+      formControlName="fromDate"
+      [value]="fromDate"
+      (dateChange)="dateChange('ping')"
+    />
+    <mat-datepicker-toggle
+      matSuffix
+      [for]="$any(fromDatePicker)"
+    ></mat-datepicker-toggle>
+    <ngx-mat-datetime-picker #fromDatePicker> </ngx-mat-datetime-picker>
+  </mat-form-field>
+  <mat-form-field appearance="fill" [formGroup]="pingDates">
+    <mat-label>End datetime</mat-label>
+    <input
+      matInput
+      [ngxMatDatetimePicker]="toDatePicker"
+      placeholder="Choose a date"
+      formControlName="toDate"
+      [value]="toDate"
+      (dateChange)="dateChange('ping')"
+    />
+    <mat-datepicker-toggle
+      matSuffix
+      [for]="$any(toDatePicker)"
+    ></mat-datepicker-toggle>
+    <ngx-mat-datetime-picker #toDatePicker> </ngx-mat-datetime-picker>
+  </mat-form-field>
+  <mat-error *ngIf="checkDateRange()"
+    >End date time must be after start datetime.</mat-error
+  >
+
+  <mat-form-field appearance="fill" [formGroup]="pingDates">
+    <mat-label>Filter by Ip</mat-label>
+    <mat-select
+      formControlName="filterIpDrop"
+      (selectionChange)="onPingFilterChanged()"
+    >
+      <mat-option *ngFor="let ip of ips" [value]="ip">
+        {{ ip }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-slide-toggle
+    [checked]="onlyDroppedPackets"
+    (change)="toggleDroppedPackets($event)"
+  >
+    Show Only Dropped Packets
+  </mat-slide-toggle>
+
+  <ag-grid-angular
+    style="width: 100%; height: 500px"
+    class="ag-theme-balham"
+    [rowData]="pingRowData"
+    [columnDefs]="pingColumnDefs"
+    (gridReady)="onGridReady($event)"
+  >
+  </ag-grid-angular>
+</div>
